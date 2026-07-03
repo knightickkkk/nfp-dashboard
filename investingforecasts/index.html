@@ -1,1 +1,841 @@
-<h1>Investing Forecasts Dashboard</h1>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NFP Investing Forecasts Dashboard</title>
+
+<style>
+  :root {
+    --navy: #17375e;
+    --blue: #1b6f99;
+    --green: #0b6b3a;
+    --red: #c81e1e;
+    --orange: #b45309;
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --muted: #5c6670;
+    --border: #e3e8ef;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: #1b1f24;
+  }
+
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 24px 28px;
+  }
+
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+  }
+
+  header p {
+    margin: 0;
+    color: #d8e4f2;
+    font-size: 16px;
+  }
+
+  .nav-link {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 9px;
+    background: white;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  main {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  input, select, button {
+    padding: 9px 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: white;
+    font-size: 14px;
+  }
+
+  button {
+    cursor: pointer;
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+    font-weight: 700;
+  }
+
+  button.secondary {
+    background: white;
+    color: var(--navy);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .kpi .label {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .kpi .value {
+    font-size: 30px;
+    font-weight: 800;
+    margin-top: 6px;
+  }
+
+  .kpi small {
+    color: var(--muted);
+  }
+
+  .section-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 21px;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  svg {
+    width: 100%;
+    min-width: 980px;
+    height: 520px;
+    display: block;
+  }
+
+  .gridline {
+    stroke: #d7dce2;
+    stroke-dasharray: 4 4;
+  }
+
+  .zero {
+    stroke: #7a828b;
+    stroke-width: 1.3;
+  }
+
+  .actual-line {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2.4;
+  }
+
+  .forecast-line {
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 2.4;
+    stroke-dasharray: 6 5;
+  }
+
+  .actual-dot { fill: var(--blue); }
+  .forecast-dot { fill: var(--orange); }
+
+  .legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  .legend-item {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+  }
+
+  .legend-swatch {
+    width: 22px;
+    height: 3px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .legend-swatch.actual { background: var(--blue); }
+  .legend-swatch.forecast { background: var(--orange); }
+
+  .table-wrap {
+    overflow: auto;
+    max-height: 560px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+    font-size: 13px;
+  }
+
+  th, td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #edf1f5;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: var(--navy);
+    color: white;
+    z-index: 1;
+  }
+
+  th:first-child, td:first-child,
+  th:nth-child(2), td:nth-child(2),
+  th:last-child, td:last-child {
+    text-align: left;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fbfd;
+  }
+
+  .badge {
+    display: inline-block;
+    min-width: 70px;
+    text-align: right;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .badge.green {
+    background: #e3f5eb;
+    color: var(--green);
+  }
+
+  .badge.red {
+    background: #fee2e2;
+    color: var(--red);
+  }
+
+  .badge.gray {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  a { color: #145da0; }
+
+  #errorBox {
+    display: none;
+    background: #fff1f2;
+    color: #991b1b;
+    border: 1px solid #fecdd3;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+
+  @media(max-width: 850px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media(max-width: 520px) {
+    .grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 23px; }
+  }
+</style>
+</head>
+
+<body>
+<header>
+  <h1>NFP Investing Forecasts Dashboard</h1>
+  <p>Consensus forecast vs actual NFP results. Select start/end dates to update the chart, KPIs, and table.</p>
+  <a href="../" class="nav-link">Back to NFP Change Dashboard</a>
+</header>
+
+<main>
+  <div id="errorBox"></div>
+
+  <section class="card">
+    <div class="section-title">
+      <h2>Date Range Controls</h2>
+      <span class="note" id="rangeNote">Loading data...</span>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="startDate">Start date</label>
+        <input id="startDate" type="date">
+      </div>
+
+      <div class="control-group">
+        <label for="endDate">End date</label>
+        <input id="endDate" type="date">
+      </div>
+
+      <div class="control-group">
+        <label for="search">Search table</label>
+        <input id="search" placeholder="Search date/month/source...">
+      </div>
+
+      <button id="applyBtn">Apply</button>
+      <button id="resetBtn" class="secondary">Reset</button>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card kpi">
+      <div class="label">Rows in range</div>
+      <div class="value" id="kpiRows">-</div>
+      <small>Filtered observations</small>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Average absolute miss</div>
+      <div class="value" id="kpiAbsMiss">-</div>
+      <small>Actual minus forecast</small>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Largest positive surprise</div>
+      <div class="value" id="kpiPositive">-</div>
+      <small id="kpiPositiveDate">-</small>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Largest negative surprise</div>
+      <div class="value" id="kpiNegative">-</div>
+      <small id="kpiNegativeDate">-</small>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h2>Actual vs Forecast Chart</h2>
+      <span class="note">Units depend on source file; usually thousands of jobs</span>
+    </div>
+
+    <div class="chart-wrap">
+      <svg id="chart" role="img" aria-label="Investing forecasts chart"></svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch actual"></span>Actual</div>
+      <div class="legend-item"><span class="legend-swatch forecast"></span>Forecast</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h2>Data Table</h2>
+      <span class="note" id="rowCount">-</span>
+    </div>
+
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Release date</th>
+            <th>Target month</th>
+            <th>Actual</th>
+            <th>Forecast</th>
+            <th>Previous</th>
+            <th>Error</th>
+            <th>Abs deviation</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+let rawData = [];
+
+const startEl = document.getElementById("startDate");
+const endEl = document.getElementById("endDate");
+const searchEl = document.getElementById("search");
+const rangeNoteEl = document.getElementById("rangeNote");
+const rowCountEl = document.getElementById("rowCount");
+const errorBox = document.getElementById("errorBox");
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let value = "";
+  let insideQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"' && insideQuotes && next === '"') {
+      value += '"';
+      i++;
+    } else if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === "," && !insideQuotes) {
+      row.push(value);
+      value = "";
+    } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+      if (value !== "" || row.length > 0) {
+        row.push(value);
+        rows.push(row);
+        row = [];
+        value = "";
+      }
+      if (char === "\r" && next === "\n") i++;
+    } else {
+      value += char;
+    }
+  }
+
+  if (value !== "" || row.length > 0) {
+    row.push(value);
+    rows.push(row);
+  }
+
+  if (!rows.length) return [];
+
+  const headers = rows[0].map(h => h.trim());
+
+  return rows.slice(1).filter(r => r.length > 1).map(r => {
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = r[i] === undefined ? "" : r[i];
+    });
+    return obj;
+  });
+}
+
+function toNumber(x) {
+  if (x === null || x === undefined || x === "") return null;
+  const cleaned = String(x).replace(/,/g, "").replace("%", "").trim();
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+
+function normalizeDate(x) {
+  if (!x) return "";
+  const d = new Date(x);
+  if (!Number.isNaN(d.getTime())) return d.toISOString().slice(0, 10);
+
+  const parts = String(x).trim().split(/[\/\-]/);
+  if (parts.length === 3) {
+    let [a, b, c] = parts;
+    if (c.length === 4) {
+      const maybe = new Date(`${c}-${a.padStart(2, "0")}-${b.padStart(2, "0")}`);
+      if (!Number.isNaN(maybe.getTime())) return maybe.toISOString().slice(0, 10);
+    }
+  }
+
+  return String(x).slice(0, 10);
+}
+
+function fmt(n) {
+  if (n === null || n === undefined || n === "") return "";
+  return Number(n).toLocaleString();
+}
+
+function plusFmt(n) {
+  if (n === null || n === undefined || n === "") return "";
+  return (Number(n) > 0 ? "+" : "") + fmt(n);
+}
+
+function firstExisting(obj, names) {
+  for (const name of names) {
+    if (obj[name] !== undefined) return obj[name];
+  }
+  return "";
+}
+
+function showError(message) {
+  errorBox.style.display = "block";
+  errorBox.textContent = message;
+}
+
+async function loadData() {
+  try {
+    const response = await fetch("investing_forecasts.csv?v=1", { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("Could not load investing_forecasts.csv");
+    }
+
+    const csvText = await response.text();
+    const parsed = parseCSV(csvText);
+
+    rawData = parsed.map(d => {
+      const releaseDateRaw = firstExisting(d, ["release_date", "Release Date", "date", "Date"]);
+      const targetMonth = firstExisting(d, ["target_month", "Target Month", "month", "Month"]);
+      const actual = firstExisting(d, ["actual", "Actual"]);
+      const forecast = firstExisting(d, ["forecast", "Forecast", "consensus", "Consensus"]);
+      const previous = firstExisting(d, ["previous", "Previous"]);
+      const error = firstExisting(d, ["error", "Error", "forecast_error", "Forecast Error"]);
+      const absDev = firstExisting(d, ["absolute_deviation", "Absolute Deviation", "abs_deviation", "Abs Deviation"]);
+      const sourceUrl = firstExisting(d, ["source_url", "Source URL", "url", "URL"]);
+
+      const actualNum = toNumber(actual);
+      const forecastNum = toNumber(forecast);
+      const errNum = toNumber(error);
+      const computedError = errNum !== null ? errNum : (
+        actualNum !== null && forecastNum !== null ? actualNum - forecastNum : null
+      );
+
+      return {
+        release_date: normalizeDate(releaseDateRaw),
+        target_month: targetMonth,
+        actual: actualNum,
+        forecast: forecastNum,
+        previous: toNumber(previous),
+        error: computedError,
+        absolute_deviation: toNumber(absDev) !== null ? toNumber(absDev) : (
+          computedError !== null ? Math.abs(computedError) : null
+        ),
+        source_url: sourceUrl
+      };
+    }).filter(d => d.release_date).sort((a, b) => a.release_date.localeCompare(b.release_date));
+
+    if (!rawData.length) {
+      throw new Error("CSV loaded, but no rows were found.");
+    }
+
+    setupControls();
+    updateAll();
+  } catch (err) {
+    console.error(err);
+    showError("Data failed to load. Make sure investing_forecasts.csv is uploaded inside the investingforecasts folder next to this index.html file.");
+  }
+}
+
+function setupControls() {
+  const dates = rawData.map(d => d.release_date).filter(Boolean);
+
+  startEl.min = dates[0];
+  startEl.max = dates[dates.length - 1];
+  startEl.value = dates[0];
+
+  endEl.min = dates[0];
+  endEl.max = dates[dates.length - 1];
+  endEl.value = dates[dates.length - 1];
+}
+
+function getFilteredRows(includeSearch) {
+  let start = startEl.value;
+  let end = endEl.value;
+
+  if (start > end) {
+    const temp = start;
+    start = end;
+    end = temp;
+    startEl.value = start;
+    endEl.value = end;
+  }
+
+  const search = searchEl.value.trim().toLowerCase();
+
+  return rawData.filter(d => {
+    const inDate = d.release_date >= start && d.release_date <= end;
+
+    const searchableText = [
+      d.release_date,
+      d.target_month,
+      d.actual,
+      d.forecast,
+      d.previous,
+      d.error,
+      d.absolute_deviation,
+      d.source_url
+    ].join(" ").toLowerCase();
+
+    const inSearch = !includeSearch || !search || searchableText.includes(search);
+
+    return inDate && inSearch;
+  });
+}
+
+function updateKpis(rows) {
+  const nums = rows.filter(d =>
+    typeof d.actual === "number" &&
+    typeof d.forecast === "number" &&
+    typeof d.error === "number"
+  );
+
+  document.getElementById("kpiRows").textContent = rows.length;
+
+  if (!nums.length) {
+    document.getElementById("kpiAbsMiss").textContent = "-";
+    document.getElementById("kpiPositive").textContent = "-";
+    document.getElementById("kpiNegative").textContent = "-";
+    document.getElementById("kpiPositiveDate").textContent = "No numeric data";
+    document.getElementById("kpiNegativeDate").textContent = "No numeric data";
+    return;
+  }
+
+  const avgAbs = nums.reduce((s, d) => s + Math.abs(d.error), 0) / nums.length;
+  const pos = nums.reduce((a, b) => b.error > a.error ? b : a, nums[0]);
+  const neg = nums.reduce((a, b) => b.error < a.error ? b : a, nums[0]);
+
+  document.getElementById("kpiAbsMiss").textContent = fmt(Math.round(avgAbs));
+  document.getElementById("kpiPositive").textContent = plusFmt(pos.error);
+  document.getElementById("kpiPositiveDate").textContent = pos.release_date;
+
+  document.getElementById("kpiNegative").textContent = plusFmt(neg.error);
+  document.getElementById("kpiNegativeDate").textContent = neg.release_date;
+}
+
+function drawChart(rows) {
+  const data = rows.filter(d =>
+    typeof d.actual === "number" &&
+    typeof d.forecast === "number"
+  );
+
+  const svg = document.getElementById("chart");
+  const W = 1160;
+  const H = 520;
+  const margin = { left: 78, right: 30, top: 28, bottom: 95 };
+
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = "";
+
+  const NS = "http://www.w3.org/2000/svg";
+
+  function make(name, attrs, text) {
+    const e = document.createElementNS(NS, name);
+    Object.entries(attrs || {}).forEach(([k, v]) => e.setAttribute(k, v));
+    if (text !== undefined) e.textContent = text;
+    svg.appendChild(e);
+    return e;
+  }
+
+  if (!data.length) {
+    make("text", {
+      x: W / 2,
+      y: H / 2,
+      "text-anchor": "middle",
+      fill: "#69727d",
+      "font-size": "16"
+    }, "No numeric actual/forecast data in selected range");
+    return;
+  }
+
+  const values = data.flatMap(d => [d.actual, d.forecast]);
+  let minValue = Math.min(...values);
+  let maxValue = Math.max(...values);
+
+  if (minValue === maxValue) {
+    minValue -= 100;
+    maxValue += 100;
+  }
+
+  const padding = Math.max(50, (maxValue - minValue) * 0.12);
+  const minY = Math.floor((minValue - padding) / 100) * 100;
+  const maxY = Math.ceil((maxValue + padding) / 100) * 100;
+
+  const plotW = W - margin.left - margin.right;
+  const plotH = H - margin.top - margin.bottom;
+
+  const xScale = i => {
+    if (data.length === 1) return margin.left + plotW / 2;
+    return margin.left + i * (plotW / (data.length - 1));
+  };
+
+  const yScale = v => margin.top + (maxY - v) * (plotH / (maxY - minY));
+
+  const tickCount = 6;
+  const tickStep = (maxY - minY) / tickCount;
+
+  for (let i = 0; i <= tickCount; i++) {
+    const tick = Math.round((minY + i * tickStep) / 10) * 10;
+    const y = yScale(tick);
+
+    make("line", {
+      x1: margin.left,
+      y1: y,
+      x2: W - margin.right,
+      y2: y,
+      class: "gridline"
+    });
+
+    make("text", {
+      x: margin.left - 10,
+      y: y + 4,
+      "text-anchor": "end",
+      fill: "#69727d",
+      "font-size": "11"
+    }, fmt(tick));
+  }
+
+  const labelStep = Math.max(1, Math.ceil(data.length / 22));
+
+  data.forEach((d, i) => {
+    if (i % labelStep !== 0 && i !== data.length - 1) return;
+
+    const x = xScale(i);
+
+    make("line", {
+      x1: x,
+      y1: margin.top,
+      x2: x,
+      y2: H - margin.bottom,
+      class: "gridline"
+    });
+
+    make("text", {
+      x: x,
+      y: H - margin.bottom + 22,
+      transform: `rotate(-90 ${x} ${H - margin.bottom + 22})`,
+      "text-anchor": "end",
+      fill: "#69727d",
+      "font-size": "10"
+    }, d.release_date);
+  });
+
+  function linePath(key) {
+    let path = "";
+    data.forEach((d, i) => {
+      path += `${i === 0 ? "M" : "L"}${xScale(i)},${yScale(d[key])} `;
+    });
+    return path;
+  }
+
+  make("path", { d: linePath("actual"), class: "actual-line" });
+  make("path", { d: linePath("forecast"), class: "forecast-line" });
+
+  data.forEach((d, i) => {
+    const actualCircle = make("circle", {
+      cx: xScale(i),
+      cy: yScale(d.actual),
+      r: 3.3,
+      class: "actual-dot"
+    });
+
+    const actualTitle = document.createElementNS(NS, "title");
+    actualTitle.textContent = `${d.release_date} actual: ${fmt(d.actual)}`;
+    actualCircle.appendChild(actualTitle);
+
+    const forecastCircle = make("circle", {
+      cx: xScale(i),
+      cy: yScale(d.forecast),
+      r: 3.3,
+      class: "forecast-dot"
+    });
+
+    const forecastTitle = document.createElementNS(NS, "title");
+    forecastTitle.textContent = `${d.release_date} forecast: ${fmt(d.forecast)}`;
+    forecastCircle.appendChild(forecastTitle);
+  });
+}
+
+function renderTable(rows) {
+  const tbody = document.querySelector("#dataTable tbody");
+  tbody.innerHTML = "";
+
+  rows.forEach(d => {
+    const tr = document.createElement("tr");
+    const cls = d.error === null ? "gray" : d.error >= 0 ? "green" : "red";
+
+    tr.innerHTML = `
+      <td>${d.release_date || ""}</td>
+      <td>${d.target_month || ""}</td>
+      <td>${fmt(d.actual)}</td>
+      <td>${fmt(d.forecast)}</td>
+      <td>${fmt(d.previous)}</td>
+      <td><span class="badge ${cls}">${plusFmt(d.error)}</span></td>
+      <td>${fmt(d.absolute_deviation)}</td>
+      <td>${d.source_url ? `<a href="${d.source_url}" target="_blank" rel="noopener">Source</a>` : ""}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+  rowCountEl.textContent = `${rows.length} table rows shown`;
+}
+
+function updateAll() {
+  const rowsForChartAndKpis = getFilteredRows(false);
+  const rowsForTable = getFilteredRows(true);
+
+  updateKpis(rowsForChartAndKpis);
+  drawChart(rowsForChartAndKpis);
+  renderTable(rowsForTable);
+
+  rangeNoteEl.textContent = `${startEl.value} to ${endEl.value}`;
+}
+
+document.getElementById("applyBtn").addEventListener("click", updateAll);
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  const dates = rawData.map(d => d.release_date).filter(Boolean);
+  startEl.value = dates[0];
+  endEl.value = dates[dates.length - 1];
+  searchEl.value = "";
+  updateAll();
+});
+
+startEl.addEventListener("change", updateAll);
+endEl.addEventListener("change", updateAll);
+searchEl.addEventListener("input", updateAll);
+
+loadData();
+</script>
+</body>
+</html>
