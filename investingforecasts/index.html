@@ -18,7 +18,9 @@
     --border: #e3e8ef;
   }
 
-  * { box-sizing: border-box; }
+  * {
+    box-sizing: border-box;
+  }
 
   body {
     margin: 0;
@@ -89,7 +91,7 @@
     font-weight: 700;
   }
 
-  input, select, button {
+  input, button {
     padding: 9px 11px;
     border: 1px solid #cbd5e1;
     border-radius: 9px;
@@ -186,8 +188,13 @@
     stroke-dasharray: 6 5;
   }
 
-  .actual-dot { fill: var(--blue); }
-  .forecast-dot { fill: var(--orange); }
+  .actual-dot {
+    fill: var(--blue);
+  }
+
+  .forecast-dot {
+    fill: var(--orange);
+  }
 
   .legend {
     display: flex;
@@ -211,8 +218,13 @@
     display: inline-block;
   }
 
-  .legend-swatch.actual { background: var(--blue); }
-  .legend-swatch.forecast { background: var(--orange); }
+  .legend-swatch.actual {
+    background: var(--blue);
+  }
+
+  .legend-swatch.forecast {
+    background: var(--orange);
+  }
 
   .table-wrap {
     overflow: auto;
@@ -243,9 +255,12 @@
     z-index: 1;
   }
 
-  th:first-child, td:first-child,
-  th:nth-child(2), td:nth-child(2),
-  th:last-child, td:last-child {
+  th:first-child,
+  td:first-child,
+  th:nth-child(2),
+  td:nth-child(2),
+  th:last-child,
+  td:last-child {
     text-align: left;
   }
 
@@ -278,7 +293,9 @@
     color: #374151;
   }
 
-  a { color: #145da0; }
+  a {
+    color: #145da0;
+  }
 
   #errorBox {
     display: none;
@@ -292,12 +309,19 @@
   }
 
   @media(max-width: 850px) {
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media(max-width: 520px) {
-    .grid { grid-template-columns: 1fr; }
-    header h1 { font-size: 23px; }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    header h1 {
+      font-size: 23px;
+    }
   }
 </style>
 </head>
@@ -349,7 +373,7 @@
     <div class="card kpi">
       <div class="label">Average absolute miss</div>
       <div class="value" id="kpiAbsMiss">-</div>
-      <small>Actual minus forecast</small>
+      <small>Average |actual - forecast|</small>
     </div>
 
     <div class="card kpi">
@@ -368,7 +392,7 @@
   <section class="card">
     <div class="section-title">
       <h2>Actual vs Forecast Chart</h2>
-      <span class="note">Units depend on source file; usually thousands of jobs</span>
+      <span class="note">Units: thousands of jobs</span>
     </div>
 
     <div class="chart-wrap">
@@ -396,7 +420,7 @@
             <th>Actual</th>
             <th>Forecast</th>
             <th>Previous</th>
-            <th>Error</th>
+            <th>Surprise</th>
             <th>Abs deviation</th>
             <th>Source</th>
           </tr>
@@ -442,7 +466,10 @@ function parseCSV(text) {
         row = [];
         value = "";
       }
-      if (char === "\r" && next === "\n") i++;
+
+      if (char === "\r" && next === "\n") {
+        i++;
+      }
     } else {
       value += char;
     }
@@ -453,7 +480,9 @@ function parseCSV(text) {
     rows.push(row);
   }
 
-  if (!rows.length) return [];
+  if (!rows.length) {
+    return [];
+  }
 
   const headers = rows[0].map(h => h.trim());
 
@@ -467,43 +496,73 @@ function parseCSV(text) {
 }
 
 function toNumber(x) {
-  if (x === null || x === undefined || x === "") return null;
-  const cleaned = String(x).replace(/,/g, "").replace("%", "").trim();
+  if (x === null || x === undefined || x === "") {
+    return null;
+  }
+
+  const cleaned = String(x)
+    .replace(/,/g, "")
+    .replace("%", "")
+    .trim();
+
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
 }
 
 function normalizeDate(x) {
-  if (!x) return "";
-  const d = new Date(x);
-  if (!Number.isNaN(d.getTime())) return d.toISOString().slice(0, 10);
+  if (!x) {
+    return "";
+  }
 
-  const parts = String(x).trim().split(/[\/\-]/);
+  const text = String(x).trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+    return text;
+  }
+
+  const d = new Date(text);
+  if (!Number.isNaN(d.getTime())) {
+    return d.toISOString().slice(0, 10);
+  }
+
+  const parts = text.split(/[\/\-]/);
   if (parts.length === 3) {
     let [a, b, c] = parts;
+
     if (c.length === 4) {
       const maybe = new Date(`${c}-${a.padStart(2, "0")}-${b.padStart(2, "0")}`);
-      if (!Number.isNaN(maybe.getTime())) return maybe.toISOString().slice(0, 10);
+      if (!Number.isNaN(maybe.getTime())) {
+        return maybe.toISOString().slice(0, 10);
+      }
     }
   }
 
-  return String(x).slice(0, 10);
+  return text.slice(0, 10);
 }
 
 function fmt(n) {
-  if (n === null || n === undefined || n === "") return "";
+  if (n === null || n === undefined || n === "") {
+    return "";
+  }
+
   return Number(n).toLocaleString();
 }
 
 function plusFmt(n) {
-  if (n === null || n === undefined || n === "") return "";
+  if (n === null || n === undefined || n === "") {
+    return "";
+  }
+
   return (Number(n) > 0 ? "+" : "") + fmt(n);
 }
 
 function firstExisting(obj, names) {
   for (const name of names) {
-    if (obj[name] !== undefined) return obj[name];
+    if (obj[name] !== undefined) {
+      return obj[name];
+    }
   }
+
   return "";
 }
 
@@ -514,7 +573,7 @@ function showError(message) {
 
 async function loadData() {
   try {
-    const response = await fetch("investing_forecasts.csv?v=1", { cache: "no-store" });
+    const response = await fetch("investing_forecasts.csv?v=20", { cache: "no-store" });
 
     if (!response.ok) {
       throw new Error("Could not load investing_forecasts.csv");
@@ -524,35 +583,104 @@ async function loadData() {
     const parsed = parseCSV(csvText);
 
     rawData = parsed.map(d => {
-      const releaseDateRaw = firstExisting(d, ["release_date", "Release Date", "date", "Date"]);
-      const targetMonth = firstExisting(d, ["target_month", "Target Month", "month", "Month"]);
-      const actual = firstExisting(d, ["actual", "Actual"]);
-      const forecast = firstExisting(d, ["forecast", "Forecast", "consensus", "Consensus"]);
-      const previous = firstExisting(d, ["previous", "Previous"]);
-      const error = firstExisting(d, ["error", "Error", "forecast_error", "Forecast Error"]);
-      const absDev = firstExisting(d, ["absolute_deviation", "Absolute Deviation", "abs_deviation", "Abs Deviation"]);
-      const sourceUrl = firstExisting(d, ["source_url", "Source URL", "url", "URL"]);
+      const releaseDateRaw = firstExisting(d, [
+        "Release Date",
+        "release_date",
+        "date",
+        "Date"
+      ]);
 
-      const actualNum = toNumber(actual);
+      const targetMonth = firstExisting(d, [
+        "Target Month",
+        "target_month",
+        "month",
+        "Month"
+      ]);
+
+      const actualOriginal = firstExisting(d, [
+        "Actual Original (000s)",
+        "actual_original_000s",
+        "actual",
+        "Actual"
+      ]);
+
+      const actualRevised = firstExisting(d, [
+        "Actual Revised/Displayed (000s)",
+        "actual_revised_displayed_000s",
+        "Actual Revised",
+        "Actual Displayed"
+      ]);
+
+      const forecast = firstExisting(d, [
+        "Forecast (000s)",
+        "forecast_000s",
+        "forecast",
+        "Forecast",
+        "consensus",
+        "Consensus"
+      ]);
+
+      const previous = firstExisting(d, [
+        "Previous Original (000s)",
+        "previous_original_000s",
+        "previous",
+        "Previous"
+      ]);
+
+      const errorOriginal = firstExisting(d, [
+        "Error vs Original (000s)",
+        "error_vs_original_000s",
+        "error",
+        "Error"
+      ]);
+
+      const absOriginal = firstExisting(d, [
+        "Abs Deviation vs Original (000s)",
+        "abs_deviation_vs_original_000s",
+        "absolute_deviation",
+        "Absolute Deviation"
+      ]);
+
+      const sourceUrl = firstExisting(d, [
+        "Source URL",
+        "source_url",
+        "url",
+        "URL"
+      ]);
+
+      const actualNum = toNumber(actualOriginal);
+      const actualRevisedNum = toNumber(actualRevised);
       const forecastNum = toNumber(forecast);
-      const errNum = toNumber(error);
-      const computedError = errNum !== null ? errNum : (
-        actualNum !== null && forecastNum !== null ? actualNum - forecastNum : null
+      const previousNum = toNumber(previous);
+      const errorNum = toNumber(errorOriginal);
+      const absNum = toNumber(absOriginal);
+
+      const surprise = (
+        actualNum !== null && forecastNum !== null
+          ? actualNum - forecastNum
+          : errorNum
+      );
+
+      const absDeviation = (
+        surprise !== null
+          ? Math.abs(surprise)
+          : absNum
       );
 
       return {
         release_date: normalizeDate(releaseDateRaw),
         target_month: targetMonth,
         actual: actualNum,
+        actual_revised: actualRevisedNum,
         forecast: forecastNum,
-        previous: toNumber(previous),
-        error: computedError,
-        absolute_deviation: toNumber(absDev) !== null ? toNumber(absDev) : (
-          computedError !== null ? Math.abs(computedError) : null
-        ),
+        previous: previousNum,
+        surprise: surprise,
+        absolute_deviation: absDeviation,
         source_url: sourceUrl
       };
-    }).filter(d => d.release_date).sort((a, b) => a.release_date.localeCompare(b.release_date));
+    })
+    .filter(d => d.release_date)
+    .sort((a, b) => a.release_date.localeCompare(b.release_date));
 
     if (!rawData.length) {
       throw new Error("CSV loaded, but no rows were found.");
@@ -599,9 +727,10 @@ function getFilteredRows(includeSearch) {
       d.release_date,
       d.target_month,
       d.actual,
+      d.actual_revised,
       d.forecast,
       d.previous,
-      d.error,
+      d.surprise,
       d.absolute_deviation,
       d.source_url
     ].join(" ").toLowerCase();
@@ -615,8 +744,11 @@ function getFilteredRows(includeSearch) {
 function updateKpis(rows) {
   const nums = rows.filter(d =>
     typeof d.actual === "number" &&
+    Number.isFinite(d.actual) &&
     typeof d.forecast === "number" &&
-    typeof d.error === "number"
+    Number.isFinite(d.forecast) &&
+    typeof d.surprise === "number" &&
+    Number.isFinite(d.surprise)
   );
 
   document.getElementById("kpiRows").textContent = rows.length;
@@ -630,22 +762,24 @@ function updateKpis(rows) {
     return;
   }
 
-  const avgAbs = nums.reduce((s, d) => s + Math.abs(d.error), 0) / nums.length;
-  const pos = nums.reduce((a, b) => b.error > a.error ? b : a, nums[0]);
-  const neg = nums.reduce((a, b) => b.error < a.error ? b : a, nums[0]);
+  const avgAbs = nums.reduce((s, d) => s + Math.abs(d.surprise), 0) / nums.length;
+  const pos = nums.reduce((a, b) => b.surprise > a.surprise ? b : a, nums[0]);
+  const neg = nums.reduce((a, b) => b.surprise < a.surprise ? b : a, nums[0]);
 
   document.getElementById("kpiAbsMiss").textContent = fmt(Math.round(avgAbs));
-  document.getElementById("kpiPositive").textContent = plusFmt(pos.error);
+  document.getElementById("kpiPositive").textContent = plusFmt(pos.surprise);
   document.getElementById("kpiPositiveDate").textContent = pos.release_date;
 
-  document.getElementById("kpiNegative").textContent = plusFmt(neg.error);
+  document.getElementById("kpiNegative").textContent = plusFmt(neg.surprise);
   document.getElementById("kpiNegativeDate").textContent = neg.release_date;
 }
 
 function drawChart(rows) {
   const data = rows.filter(d =>
     typeof d.actual === "number" &&
-    typeof d.forecast === "number"
+    Number.isFinite(d.actual) &&
+    typeof d.forecast === "number" &&
+    Number.isFinite(d.forecast)
   );
 
   const svg = document.getElementById("chart");
@@ -661,7 +795,9 @@ function drawChart(rows) {
   function make(name, attrs, text) {
     const e = document.createElementNS(NS, name);
     Object.entries(attrs || {}).forEach(([k, v]) => e.setAttribute(k, v));
-    if (text !== undefined) e.textContent = text;
+    if (text !== undefined) {
+      e.textContent = text;
+    }
     svg.appendChild(e);
     return e;
   }
@@ -694,7 +830,10 @@ function drawChart(rows) {
   const plotH = H - margin.top - margin.bottom;
 
   const xScale = i => {
-    if (data.length === 1) return margin.left + plotW / 2;
+    if (data.length === 1) {
+      return margin.left + plotW / 2;
+    }
+
     return margin.left + i * (plotW / (data.length - 1));
   };
 
@@ -727,7 +866,9 @@ function drawChart(rows) {
   const labelStep = Math.max(1, Math.ceil(data.length / 22));
 
   data.forEach((d, i) => {
-    if (i % labelStep !== 0 && i !== data.length - 1) return;
+    if (i % labelStep !== 0 && i !== data.length - 1) {
+      return;
+    }
 
     const x = xScale(i);
 
@@ -751,14 +892,23 @@ function drawChart(rows) {
 
   function linePath(key) {
     let path = "";
+
     data.forEach((d, i) => {
       path += `${i === 0 ? "M" : "L"}${xScale(i)},${yScale(d[key])} `;
     });
+
     return path;
   }
 
-  make("path", { d: linePath("actual"), class: "actual-line" });
-  make("path", { d: linePath("forecast"), class: "forecast-line" });
+  make("path", {
+    d: linePath("actual"),
+    class: "actual-line"
+  });
+
+  make("path", {
+    d: linePath("forecast"),
+    class: "forecast-line"
+  });
 
   data.forEach((d, i) => {
     const actualCircle = make("circle", {
@@ -791,7 +941,7 @@ function renderTable(rows) {
 
   rows.forEach(d => {
     const tr = document.createElement("tr");
-    const cls = d.error === null ? "gray" : d.error >= 0 ? "green" : "red";
+    const cls = d.surprise === null ? "gray" : d.surprise >= 0 ? "green" : "red";
 
     tr.innerHTML = `
       <td>${d.release_date || ""}</td>
@@ -799,7 +949,7 @@ function renderTable(rows) {
       <td>${fmt(d.actual)}</td>
       <td>${fmt(d.forecast)}</td>
       <td>${fmt(d.previous)}</td>
-      <td><span class="badge ${cls}">${plusFmt(d.error)}</span></td>
+      <td><span class="badge ${cls}">${plusFmt(d.surprise)}</span></td>
       <td>${fmt(d.absolute_deviation)}</td>
       <td>${d.source_url ? `<a href="${d.source_url}" target="_blank" rel="noopener">Source</a>` : ""}</td>
     `;
