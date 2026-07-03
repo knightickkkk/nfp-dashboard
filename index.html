@@ -1,61 +1,349 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>US Nonfarm Payrolls Dashboard</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NFP Dashboard</title>
+
 <style>
-:root { --navy:#17375e; --line:#1b6f99; --green:#0b6b3a; --red:#c81e1e; --bg:#f6f8fb; --card:#ffffff; --muted:#5c6670; }
-* { box-sizing:border-box; }
-body { margin:0; font-family: Arial, Helvetica, sans-serif; background:var(--bg); color:#1b1f24; }
-header { background:var(--navy); color:#fff; padding:22px 28px; }
-header h1 { margin:0 0 6px; font-size:26px; }
-header p { margin:0; color:#d8e4f2; }
-main { max-width:1200px; margin:0 auto; padding:22px; }
-.grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
-.card { background:var(--card); border:1px solid #e3e8ef; border-radius:14px; box-shadow:0 1px 2px rgba(0,0,0,.04); padding:16px; }
-.kpi .label { color:var(--muted); font-size:13px; }
-.kpi .value { font-size:26px; font-weight:700; margin-top:6px; }
-.kpi small { color:var(--muted); }
-.section-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
-h2 { margin:0; font-size:19px; }
-a { color:#145da0; }
-.chart-wrap { width:100%; overflow-x:auto; }
-svg { width:100%; min-width:980px; height:480px; display:block; }
-.axis text { font-size:11px; fill:#69727d; }
-.gridline { stroke:#d7dce2; stroke-dasharray:4 4; }
-.zero { stroke:#7a828b; stroke-width:1.2; }
-.line { fill:none; stroke:var(--line); stroke-width:2.2; }
-.dot { fill:var(--line); opacity:.9; }
-.neg { fill:var(--red); } .pos { fill:var(--green); }
-.controls { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
-input, select { padding:9px 10px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; }
-.table-wrap { overflow:auto; max-height:520px; border:1px solid #e3e8ef; border-radius:12px; }
-table { border-collapse:collapse; width:100%; background:#fff; font-size:13px; }
-th, td { padding:9px 10px; border-bottom:1px solid #edf1f5; text-align:right; white-space:nowrap; }
-th { position:sticky; top:0; background:var(--navy); color:#fff; z-index:1; }
-th:first-child, td:first-child, th:nth-child(6), td:nth-child(6), th:nth-child(7), td:nth-child(7) { text-align:left; }
-tr:nth-child(even) td { background:#f8fbfd; }
-.badge { display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; font-weight:700; }
-.badge.green { background:#e3f5eb; color:var(--green); }
-.badge.red { background:#fee2e2; color:var(--red); }
-.note { color:var(--muted); font-size:13px; line-height:1.45; }
-.footer-links { display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
-@media(max-width:850px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media(max-width:520px) { .grid { grid-template-columns:1fr; } header h1 { font-size:22px; } }
+  :root {
+    --navy: #17375e;
+    --blue: #1b6f99;
+    --green: #0b6b3a;
+    --red: #c81e1e;
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --muted: #5c6670;
+    --border: #e3e8ef;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: #1b1f24;
+  }
+
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 24px 28px;
+  }
+
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+  }
+
+  header p {
+    margin: 0;
+    color: #d8e4f2;
+    font-size: 16px;
+  }
+
+  main {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  input, select, button {
+    padding: 9px 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: white;
+    font-size: 14px;
+  }
+
+  button {
+    cursor: pointer;
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+    font-weight: 700;
+  }
+
+  button.secondary {
+    background: white;
+    color: var(--navy);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .kpi .label {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .kpi .value {
+    font-size: 30px;
+    font-weight: 800;
+    margin-top: 6px;
+  }
+
+  .kpi small {
+    color: var(--muted);
+  }
+
+  .section-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 21px;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  svg {
+    width: 100%;
+    min-width: 980px;
+    height: 500px;
+    display: block;
+  }
+
+  .gridline {
+    stroke: #d7dce2;
+    stroke-dasharray: 4 4;
+  }
+
+  .zero {
+    stroke: #7a828b;
+    stroke-width: 1.3;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2.4;
+  }
+
+  .dot {
+    fill: var(--blue);
+  }
+
+  .dot.neg {
+    fill: var(--red);
+  }
+
+  .table-wrap {
+    overflow: auto;
+    max-height: 560px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+    font-size: 13px;
+  }
+
+  th, td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #edf1f5;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: var(--navy);
+    color: white;
+    z-index: 1;
+  }
+
+  th:first-child,
+  td:first-child,
+  th:nth-child(6),
+  td:nth-child(6),
+  th:nth-child(7),
+  td:nth-child(7) {
+    text-align: left;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fbfd;
+  }
+
+  .badge {
+    display: inline-block;
+    min-width: 80px;
+    text-align: right;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .badge.green {
+    background: #e3f5eb;
+    color: var(--green);
+  }
+
+  .badge.red {
+    background: #fee2e2;
+    color: var(--red);
+  }
+
+  .badge.gray {
+    background: #e5e7eb;
+    color: #374151;
+  }
+
+  a {
+    color: #145da0;
+  }
+
+  #errorBox {
+    display: none;
+    background: #fff1f2;
+    color: #991b1b;
+    border: 1px solid #fecdd3;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+
+  @media(max-width: 850px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media(max-width: 520px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    header h1 {
+      font-size: 23px;
+    }
+  }
 </style>
 </head>
+
 <body>
 <header>
   <h1>Total Nonfarm Payroll Employment: Monthly Change</h1>
-  <p>BLS CES0000000001, monthly change in thousands of jobs. Data span: Jan 2020 to Jun 2026. Latest numeric value: May 2026.</p>
+  <p>BLS CES0000000001. Monthly change in thousands of jobs. Select start/end months to update the chart, KPIs, and table.</p>
 </header>
+
 <main>
+  <div id="errorBox"></div>
+
+  <section class="card">
+    <div class="section-title">
+      <h2>Date Range Controls</h2>
+      <span class="note" id="rangeNote">Loading data...</span>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="startDate">Start month</label>
+        <input id="startDate" type="month">
+      </div>
+
+      <div class="control-group">
+        <label for="endDate">End month</label>
+        <input id="endDate" type="month">
+      </div>
+
+      <div class="control-group">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="">All statuses</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="search">Search table</label>
+        <input id="search" placeholder="Search month/status/notes...">
+      </div>
+
+      <button id="applyBtn">Apply</button>
+      <button id="resetBtn" class="secondary">Reset</button>
+    </div>
+  </section>
+
   <section class="grid">
-    <div class="card kpi"><div class="label">Months with numeric data</div><div class="value">77</div><small>Rows with signed change values</small></div>
-    <div class="card kpi"><div class="label">Positive months</div><div class="value">68</div><small>Payrolls increased</small></div>
-    <div class="card kpi"><div class="label">Largest gain</div><div class="value">+4,631</div><small>Jun 2020, thousands</small></div>
-    <div class="card kpi"><div class="label">Largest loss</div><div class="value">-20,469</div><small>Apr 2020, thousands</small></div>
+    <div class="card kpi">
+      <div class="label">Months with numeric data</div>
+      <div class="value" id="kpiMonths">-</div>
+      <small>Rows with signed change values</small>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Positive months</div>
+      <div class="value" id="kpiPositive">-</div>
+      <small>Payrolls increased</small>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Largest gain</div>
+      <div class="value" id="kpiGain">-</div>
+      <small id="kpiGainMonth">-</small>
+    </div>
+
+    <div class="card kpi">
+      <div class="label">Largest loss</div>
+      <div class="value" id="kpiLoss">-</div>
+      <small id="kpiLossMonth">-</small>
+    </div>
   </section>
 
   <section class="card">
@@ -63,329 +351,447 @@ tr:nth-child(even) td { background:#f8fbfd; }
       <h2>Monthly Change Chart</h2>
       <span class="note">Units: thousands of jobs</span>
     </div>
-    <div class="chart-wrap"><svg id="chart" role="img" aria-label="NFP monthly change chart"></svg></div>
-  </section>
 
-  <section class="card" style="margin-top:18px;">
-    <div class="section-title"><h2>Data Table</h2><span class="note">Search by month, year, status, or note</span></div>
-    <div class="controls">
-      <input id="search" placeholder="Search table..." />
-      <select id="status"><option value="">All statuses</option><option>Available</option><option>No Employment Situation report published</option><option>Pending/not posted in BLS current page checked</option></select>
-      <a href="nfp_change_data.csv" download>Download CSV</a>
-      <a href="nfp_change_vs_time_jan2020_jun2026.xlsx" download>Download Excel workbook</a>
+    <div class="chart-wrap">
+      <svg id="chart" role="img" aria-label="NFP monthly change chart"></svg>
     </div>
-    <div class="table-wrap"><table id="dataTable"><thead><tr><th>Month</th><th>Year</th><th>BLS Level (000s)</th><th>Change (000s)</th><th>Change jobs</th><th>Status</th><th>Source</th></tr></thead><tbody></tbody></table></div>
   </section>
 
-  <section class="card" style="margin-top:18px;">
-    <h2>Sources and Notes</h2>
-    <p class="note"><b>Primary series:</b> CES0000000001, all employees, thousands, total nonfarm, seasonally adjusted.</p>
-    <p class="note"><b>Method:</b> signed monthly change = current-month BLS total nonfarm payroll employment level minus prior-month level. Values are shown in thousands of jobs.</p>
-    <p class="note"><b>Important:</b> archived Employment Situation releases can later be revised. This dashboard uses the data in the workbook supplied for the GitHub Pages site.</p>
-    <div class="footer-links">
-      <a href="https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true" target="_blank" rel="noopener">BLS series report</a>
-      <a href="https://www.bls.gov/bls/news-release/empsit.htm" target="_blank" rel="noopener">BLS Employment Situation archive</a>
-      <a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank" rel="noopener">Current Employment Situation release</a>
+  <section class="card">
+    <div class="section-title">
+      <h2>Data Table</h2>
+      <span class="note" id="rowCount">-</span>
+    </div>
+
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th>BLS Level (000s)</th>
+            <th>Signed Change (000s)</th>
+            <th>Signed Change Jobs</th>
+            <th>Status</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
   </section>
 </main>
+
 <script>
-const rawData = [
-  // keep your existing rawData array here
-];
-const numericData = rawData.filter(d => typeof d.signed_change_000s === 'number');
+let rawData = [];
 
-const minMonth = rawData[0].month_date.slice(0, 7);
-const maxMonth = rawData[rawData.length - 1].month_date.slice(0, 7);
+const startEl = document.getElementById("startDate");
+const endEl = document.getElementById("endDate");
+const statusEl = document.getElementById("status");
+const searchEl = document.getElementById("search");
+const rangeNoteEl = document.getElementById("rangeNote");
+const rowCountEl = document.getElementById("rowCount");
+const errorBox = document.getElementById("errorBox");
 
-const startEl = document.getElementById('startDate');
-const endEl = document.getElementById('endDate');
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let value = "";
+  let insideQuotes = false;
 
-startEl.min = minMonth;
-startEl.max = maxMonth;
-startEl.value = minMonth;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
 
-endEl.min = minMonth;
-endEl.max = maxMonth;
-endEl.value = maxMonth;
+    if (char === '"' && insideQuotes && next === '"') {
+      value += '"';
+      i++;
+    } else if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === "," && !insideQuotes) {
+      row.push(value);
+      value = "";
+    } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+      if (value !== "" || row.length > 0) {
+        row.push(value);
+        rows.push(row);
+        row = [];
+        value = "";
+      }
 
-function fmt(n) {
-  return (n === '' || n === null || n === undefined)
-    ? ''
-    : Number(n).toLocaleString();
-}
-
-function monthKey(d) {
-  return d.month_date.slice(0, 7);
-}
-
-function getFilteredRows(includeSearch = true) {
-  let start = startEl.value || minMonth;
-  let end = endEl.value || maxMonth;
-
-  if (start > end) {
-    const tmp = start;
-    start = end;
-    end = tmp;
+      if (char === "\r" && next === "\n") {
+        i++;
+      }
+    } else {
+      value += char;
+    }
   }
 
-  const statusValue = document.getElementById('status').value;
-  const searchValue = document.getElementById('search').value.toLowerCase();
+  if (value !== "" || row.length > 0) {
+    row.push(value);
+    rows.push(row);
+  }
+
+  if (rows.length === 0) return [];
+
+  const headers = rows[0].map(h => h.trim());
+
+  return rows.slice(1).filter(r => r.length > 1).map(r => {
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = r[i] === undefined ? "" : r[i];
+    });
+    return obj;
+  });
+}
+
+function toNumber(x) {
+  if (x === null || x === undefined || x === "") return null;
+  const n = Number(String(x).replace(/,/g, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+function monthKey(row) {
+  return String(row.month_date).slice(0, 7);
+}
+
+function fmt(n) {
+  if (n === null || n === undefined || n === "") return "";
+  return Number(n).toLocaleString();
+}
+
+function plusFmt(n) {
+  if (n === null || n === undefined || n === "") return "";
+  return (Number(n) > 0 ? "+" : "") + fmt(n);
+}
+
+function showError(message) {
+  errorBox.style.display = "block";
+  errorBox.textContent = message;
+}
+
+async function loadData() {
+  try {
+    const response = await fetch("nfp_change_data.csv?v=5", { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error("Could not load nfp_change_data.csv");
+    }
+
+    const csvText = await response.text();
+    const parsed = parseCSV(csvText);
+
+    rawData = parsed.map(d => ({
+      month_date: d.month_date,
+      month: d.month,
+      year: toNumber(d.year),
+      bls_level_000s: toNumber(d.bls_level_000s),
+      signed_change_000s: toNumber(d.signed_change_000s),
+      signed_change_jobs: toNumber(d.signed_change_jobs),
+      report_status: d.report_status || "",
+      source_url: d.source_url || "",
+      notes: d.notes || ""
+    })).sort((a, b) => monthKey(a).localeCompare(monthKey(b)));
+
+    if (rawData.length === 0) {
+      throw new Error("CSV loaded, but no rows were found.");
+    }
+
+    setupControls();
+    updateAll();
+  } catch (err) {
+    console.error(err);
+    showError("Data failed to load. Make sure nfp_change_data.csv is uploaded in the same GitHub repo/root folder as index.html.");
+  }
+}
+
+function setupControls() {
+  const months = rawData.map(monthKey).filter(Boolean);
+  const minMonth = months[0];
+  const maxMonth = months[months.length - 1];
+
+  startEl.min = minMonth;
+  startEl.max = maxMonth;
+  startEl.value = minMonth;
+
+  endEl.min = minMonth;
+  endEl.max = maxMonth;
+  endEl.value = maxMonth;
+
+  const statuses = [...new Set(rawData.map(d => d.report_status).filter(Boolean))].sort();
+
+  statuses.forEach(s => {
+    const option = document.createElement("option");
+    option.value = s;
+    option.textContent = s;
+    statusEl.appendChild(option);
+  });
+}
+
+function getFilteredRows(includeSearch) {
+  let start = startEl.value;
+  let end = endEl.value;
+
+  if (start > end) {
+    const temp = start;
+    start = end;
+    end = temp;
+    startEl.value = start;
+    endEl.value = end;
+  }
+
+  const selectedStatus = statusEl.value;
+  const search = searchEl.value.trim().toLowerCase();
 
   return rawData.filter(d => {
-    const inDateRange = monthKey(d) >= start && monthKey(d) <= end;
-    const inStatus = !statusValue || d.report_status === statusValue;
-    const inSearch = !includeSearch || JSON.stringify(d).toLowerCase().includes(searchValue);
+    const mk = monthKey(d);
+    const inDate = mk >= start && mk <= end;
+    const inStatus = !selectedStatus || d.report_status === selectedStatus;
 
-    return inDateRange && inStatus && inSearch;
+    const searchableText = [
+      d.month,
+      d.year,
+      d.report_status,
+      d.notes,
+      d.source_url,
+      d.signed_change_000s,
+      d.signed_change_jobs
+    ].join(" ").toLowerCase();
+
+    const inSearch = !includeSearch || !search || searchableText.includes(search);
+
+    return inDate && inStatus && inSearch;
   });
 }
 
 function updateKpis(rows) {
-  const nums = rows.filter(d => typeof d.signed_change_000s === 'number');
+  const nums = rows.filter(d => typeof d.signed_change_000s === "number" && Number.isFinite(d.signed_change_000s));
 
-  document.getElementById('kpiMonths').textContent = nums.length;
-  document.getElementById('kpiPositive').textContent =
-    nums.filter(d => d.signed_change_000s > 0).length;
+  document.getElementById("kpiMonths").textContent = nums.length;
+  document.getElementById("kpiPositive").textContent = nums.filter(d => d.signed_change_000s > 0).length;
 
-  if (!nums.length) {
-    document.getElementById('kpiGain').textContent = '-';
-    document.getElementById('kpiLoss').textContent = '-';
-    document.getElementById('kpiGainMonth').textContent = 'No numeric data';
-    document.getElementById('kpiLossMonth').textContent = 'No numeric data';
+  if (nums.length === 0) {
+    document.getElementById("kpiGain").textContent = "-";
+    document.getElementById("kpiLoss").textContent = "-";
+    document.getElementById("kpiGainMonth").textContent = "No numeric data";
+    document.getElementById("kpiLossMonth").textContent = "No numeric data";
     return;
   }
 
-  const gain = nums.reduce(
-    (a, b) => b.signed_change_000s > a.signed_change_000s ? b : a,
-    nums[0]
-  );
+  const gain = nums.reduce((a, b) => b.signed_change_000s > a.signed_change_000s ? b : a, nums[0]);
+  const loss = nums.reduce((a, b) => b.signed_change_000s < a.signed_change_000s ? b : a, nums[0]);
 
-  const loss = nums.reduce(
-    (a, b) => b.signed_change_000s < a.signed_change_000s ? b : a,
-    nums[0]
-  );
+  document.getElementById("kpiGain").textContent = plusFmt(gain.signed_change_000s);
+  document.getElementById("kpiGainMonth").textContent = gain.month + ", thousands";
 
-  document.getElementById('kpiGain').textContent =
-    (gain.signed_change_000s > 0 ? '+' : '') + fmt(gain.signed_change_000s);
-  document.getElementById('kpiGainMonth').textContent =
-    gain.month + ', thousands';
-
-  document.getElementById('kpiLoss').textContent =
-    (loss.signed_change_000s > 0 ? '+' : '') + fmt(loss.signed_change_000s);
-  document.getElementById('kpiLossMonth').textContent =
-    loss.month + ', thousands';
+  document.getElementById("kpiLoss").textContent = plusFmt(loss.signed_change_000s);
+  document.getElementById("kpiLossMonth").textContent = loss.month + ", thousands";
 }
 
 function drawChart(rows) {
-  const data = rows.filter(d => typeof d.signed_change_000s === 'number');
-  const svg = document.getElementById('chart');
+  const data = rows.filter(d => typeof d.signed_change_000s === "number" && Number.isFinite(d.signed_change_000s));
+  const svg = document.getElementById("chart");
 
   const W = 1160;
-  const H = 480;
-  const m = { l: 70, r: 30, t: 25, b: 85 };
+  const H = 500;
+  const margin = { left: 78, right: 30, top: 28, bottom: 95 };
 
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = '';
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = "";
 
-  const NS = 'http://www.w3.org/2000/svg';
+  const NS = "http://www.w3.org/2000/svg";
 
-  function el(name, attrs, txt) {
+  function make(name, attrs, text) {
     const e = document.createElementNS(NS, name);
-    for (const k in attrs) e.setAttribute(k, attrs[k]);
-    if (txt !== undefined) e.textContent = txt;
+    Object.entries(attrs || {}).forEach(([k, v]) => e.setAttribute(k, v));
+    if (text !== undefined) e.textContent = text;
     svg.appendChild(e);
     return e;
   }
 
   if (data.length === 0) {
-    el(
-      'text',
-      {
-        x: W / 2,
-        y: H / 2,
-        'text-anchor': 'middle',
-        fill: '#69727d',
-        'font-size': '16'
-      },
-      'No numeric data in selected range'
-    );
+    make("text", {
+      x: W / 2,
+      y: H / 2,
+      "text-anchor": "middle",
+      fill: "#69727d",
+      "font-size": "16"
+    }, "No numeric data in selected range");
     return;
   }
 
-  const vals = data.map(d => d.signed_change_000s);
-  const pad = Math.max(200, (Math.max(...vals) - Math.min(...vals)) * 0.1);
+  const values = data.map(d => d.signed_change_000s);
+  let minValue = Math.min(...values);
+  let maxValue = Math.max(...values);
 
-  const minV = Math.min(
-    -100,
-    Math.floor((Math.min(...vals) - pad) / 500) * 500
-  );
-
-  const maxV = Math.max(
-    100,
-    Math.ceil((Math.max(...vals) + pad) / 500) * 500
-  );
-
-  const x = i =>
-    data.length === 1
-      ? m.l + (W - m.l - m.r) / 2
-      : m.l + i * ((W - m.l - m.r) / (data.length - 1));
-
-  const y = v =>
-    m.t + (maxV - v) * ((H - m.t - m.b) / (maxV - minV));
-
-  const ticks = [];
-  for (let t = minV; t <= maxV; t += (maxV - minV) / 6) {
-    ticks.push(Math.round(t / 100) * 100);
+  if (minValue === maxValue) {
+    minValue -= 100;
+    maxValue += 100;
   }
 
-  [...new Set(ticks.concat([0]).sort((a, b) => a - b))].forEach(t => {
-    el('line', {
-      x1: m.l,
-      y1: y(t),
-      x2: W - m.r,
-      y2: y(t),
-      class: t === 0 ? 'zero' : 'gridline'
+  const padding = Math.max(150, (maxValue - minValue) * 0.12);
+  const minY = Math.floor((minValue - padding) / 500) * 500;
+  const maxY = Math.ceil((maxValue + padding) / 500) * 500;
+
+  const plotW = W - margin.left - margin.right;
+  const plotH = H - margin.top - margin.bottom;
+
+  const xScale = i => {
+    if (data.length === 1) return margin.left + plotW / 2;
+    return margin.left + i * (plotW / (data.length - 1));
+  };
+
+  const yScale = v => margin.top + (maxY - v) * (plotH / (maxY - minY));
+
+  const tickCount = 6;
+  const tickStep = (maxY - minY) / tickCount;
+
+  for (let i = 0; i <= tickCount; i++) {
+    const tick = Math.round((minY + i * tickStep) / 100) * 100;
+    const y = yScale(tick);
+
+    make("line", {
+      x1: margin.left,
+      y1: y,
+      x2: W - margin.right,
+      y2: y,
+      class: tick === 0 ? "zero" : "gridline"
     });
 
-    el(
-      'text',
-      {
-        x: m.l - 8,
-        y: y(t) + 4,
-        'text-anchor': 'end',
-        fill: '#69727d',
-        'font-size': '11'
-      },
-      t > 0 ? '+' + fmt(t) : fmt(t)
-    );
-  });
-
-  const step = Math.max(1, Math.ceil(data.length / 24));
-
-  for (let i = 0; i < data.length; i += step) {
-    el('line', {
-      x1: x(i),
-      y1: m.t,
-      x2: x(i),
-      y2: H - m.b,
-      class: 'gridline'
-    });
-
-    el(
-      'text',
-      {
-        x: x(i),
-        y: H - m.b + 20,
-        transform: `rotate(-90 ${x(i)} ${H - m.b + 20})`,
-        'text-anchor': 'end',
-        fill: '#69727d',
-        'font-size': '10'
-      },
-      data[i].month
-    );
+    make("text", {
+      x: margin.left - 10,
+      y: y + 4,
+      "text-anchor": "end",
+      fill: "#69727d",
+      "font-size": "11"
+    }, plusFmt(tick));
   }
 
-  let path = '';
+  if (minY < 0 && maxY > 0) {
+    make("line", {
+      x1: margin.left,
+      y1: yScale(0),
+      x2: W - margin.right,
+      y2: yScale(0),
+      class: "zero"
+    });
+  }
+
+  const labelStep = Math.max(1, Math.ceil(data.length / 22));
+
   data.forEach((d, i) => {
-    path += (i ? 'L' : 'M') + x(i) + ',' + y(d.signed_change_000s) + ' ';
+    if (i % labelStep !== 0 && i !== data.length - 1) return;
+
+    const x = xScale(i);
+
+    make("line", {
+      x1: x,
+      y1: margin.top,
+      x2: x,
+      y2: H - margin.bottom,
+      class: "gridline"
+    });
+
+    make("text", {
+      x: x,
+      y: H - margin.bottom + 22,
+      transform: `rotate(-90 ${x} ${H - margin.bottom + 22})`,
+      "text-anchor": "end",
+      fill: "#69727d",
+      "font-size": "10"
+    }, d.month);
   });
 
-  el('path', {
+  let path = "";
+
+  data.forEach((d, i) => {
+    const x = xScale(i);
+    const y = yScale(d.signed_change_000s);
+    path += `${i === 0 ? "M" : "L"}${x},${y} `;
+  });
+
+  make("path", {
     d: path,
-    class: 'line'
+    class: "line"
   });
 
   data.forEach((d, i) => {
-    const c = el('circle', {
-      cx: x(i),
-      cy: y(d.signed_change_000s),
-      r: 3,
-      class: d.signed_change_000s < 0 ? 'dot neg' : 'dot'
+    const circle = make("circle", {
+      cx: xScale(i),
+      cy: yScale(d.signed_change_000s),
+      r: 3.4,
+      class: d.signed_change_000s < 0 ? "dot neg" : "dot"
     });
 
-    c.innerHTML = `<title>${d.month}: ${fmt(d.signed_change_000s)} thousand</title>`;
+    const title = document.createElementNS(NS, "title");
+    title.textContent = `${d.month}: ${plusFmt(d.signed_change_000s)} thousand`;
+    circle.appendChild(title);
   });
 
-  el(
-    'text',
-    {
-      x: 22,
-      y: (H - m.t - m.b) / 2 + m.t,
-      transform: `rotate(-90 22 ${(H - m.t - m.b) / 2 + m.t})`,
-      fill: '#69727d',
-      'font-size': '12',
-      'text-anchor': 'middle'
-    },
-    'Thousands of jobs'
-  );
+  make("text", {
+    x: 24,
+    y: margin.top + plotH / 2,
+    transform: `rotate(-90 24 ${margin.top + plotH / 2})`,
+    fill: "#69727d",
+    "font-size": "12",
+    "text-anchor": "middle"
+  }, "Thousands of jobs");
 }
 
 function renderTable(rows) {
-  const tbody = document.querySelector('#dataTable tbody');
-  tbody.innerHTML = '';
+  const tbody = document.querySelector("#dataTable tbody");
+  tbody.innerHTML = "";
 
   rows.forEach(d => {
-    const tr = document.createElement('tr');
-    const isNum = typeof d.signed_change_000s === 'number';
-    const cls = !isNum
-      ? 'gray'
-      : Number(d.signed_change_000s) < 0
-        ? 'red'
-        : 'green';
-
-    const chg = !isNum
-      ? ''
-      : (Number(d.signed_change_000s) > 0 ? '+' : '') + fmt(d.signed_change_000s);
+    const tr = document.createElement("tr");
+    const isNum = typeof d.signed_change_000s === "number" && Number.isFinite(d.signed_change_000s);
+    const cls = !isNum ? "gray" : d.signed_change_000s < 0 ? "red" : "green";
+    const change = isNum ? plusFmt(d.signed_change_000s) : "";
 
     tr.innerHTML = `
-      <td>${d.month}</td>
-      <td>${d.year}</td>
+      <td>${d.month || ""}</td>
+      <td>${d.year || ""}</td>
       <td>${fmt(d.bls_level_000s)}</td>
-      <td><span class="badge ${cls}">${chg}</span></td>
+      <td><span class="badge ${cls}">${change}</span></td>
       <td>${fmt(d.signed_change_jobs)}</td>
-      <td>${d.report_status}</td>
-      <td><a href="${d.source_url}" target="_blank" rel="noopener">BLS</a></td>
+      <td>${d.report_status || ""}</td>
+      <td>${d.source_url ? `<a href="${d.source_url}" target="_blank" rel="noopener">BLS</a>` : ""}</td>
     `;
 
     tbody.appendChild(tr);
   });
+
+  rowCountEl.textContent = `${rows.length} table rows shown`;
 }
 
 function updateAll() {
-  if (startEl.value > endEl.value) {
-    const t = startEl.value;
-    startEl.value = endEl.value;
-    endEl.value = t;
-  }
+  const rowsForChartAndKpis = getFilteredRows(false);
+  const rowsForTable = getFilteredRows(true);
 
-  const rowsNoSearch = getFilteredRows(false);
-  const rowsWithSearch = getFilteredRows(true);
+  updateKpis(rowsForChartAndKpis);
+  drawChart(rowsForChartAndKpis);
+  renderTable(rowsForTable);
 
-  updateKpis(rowsNoSearch);
-  drawChart(rowsNoSearch);
-  renderTable(rowsWithSearch);
-
-  document.getElementById('rangeNote').textContent =
-    `${startEl.value} to ${endEl.value}`;
+  rangeNoteEl.textContent = `${startEl.value} to ${endEl.value}`;
 }
 
-document.getElementById('applyBtn').addEventListener('click', updateAll);
+document.getElementById("applyBtn").addEventListener("click", updateAll);
 
-document.getElementById('resetBtn').addEventListener('click', () => {
-  startEl.value = minMonth;
-  endEl.value = maxMonth;
-  document.getElementById('status').value = '';
-  document.getElementById('search').value = '';
+document.getElementById("resetBtn").addEventListener("click", () => {
+  const months = rawData.map(monthKey).filter(Boolean);
+  startEl.value = months[0];
+  endEl.value = months[months.length - 1];
+  statusEl.value = "";
+  searchEl.value = "";
   updateAll();
 });
 
-document.getElementById('search').addEventListener('input', updateAll);
-document.getElementById('status').addEventListener('change', updateAll);
-startEl.addEventListener('change', updateAll);
-endEl.addEventListener('change', updateAll);
+startEl.addEventListener("change", updateAll);
+endEl.addEventListener("change", updateAll);
+statusEl.addEventListener("change", updateAll);
+searchEl.addEventListener("input", updateAll);
 
-updateAll();
+loadData();
 </script>
 </body>
 </html>
