@@ -90,53 +90,302 @@ tr:nth-child(even) td { background:#f8fbfd; }
   </section>
 </main>
 <script>
-const rawData = [{"month_date": "2020-01-01", "month": "Jan 2020", "year": 2020, "bls_level_000s": 152031, "signed_change_000s": 237, "signed_change_jobs": 237000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-02-01", "month": "Feb 2020", "year": 2020, "bls_level_000s": 152293, "signed_change_000s": 262, "signed_change_jobs": 262000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-03-01", "month": "Mar 2020", "year": 2020, "bls_level_000s": 150895, "signed_change_000s": -1398, "signed_change_jobs": -1398000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-04-01", "month": "Apr 2020", "year": 2020, "bls_level_000s": 130426, "signed_change_000s": -20469, "signed_change_jobs": -20469000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-05-01", "month": "May 2020", "year": 2020, "bls_level_000s": 133040, "signed_change_000s": 2614, "signed_change_jobs": 2614000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-06-01", "month": "Jun 2020", "year": 2020, "bls_level_000s": 137671, "signed_change_000s": 4631, "signed_change_jobs": 4631000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-07-01", "month": "Jul 2020", "year": 2020, "bls_level_000s": 139255, "signed_change_000s": 1584, "signed_change_jobs": 1584000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-08-01", "month": "Aug 2020", "year": 2020, "bls_level_000s": 140821, "signed_change_000s": 1566, "signed_change_jobs": 1566000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-09-01", "month": "Sep 2020", "year": 2020, "bls_level_000s": 141770, "signed_change_000s": 949, "signed_change_jobs": 949000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-10-01", "month": "Oct 2020", "year": 2020, "bls_level_000s": 142460, "signed_change_000s": 690, "signed_change_jobs": 690000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-11-01", "month": "Nov 2020", "year": 2020, "bls_level_000s": 142733, "signed_change_000s": 273, "signed_change_jobs": 273000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2020-12-01", "month": "Dec 2020", "year": 2020, "bls_level_000s": 142548, "signed_change_000s": -185, "signed_change_jobs": -185000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-01-01", "month": "Jan 2021", "year": 2021, "bls_level_000s": 142863, "signed_change_000s": 315, "signed_change_jobs": 315000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-02-01", "month": "Feb 2021", "year": 2021, "bls_level_000s": 143380, "signed_change_000s": 517, "signed_change_jobs": 517000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-03-01", "month": "Mar 2021", "year": 2021, "bls_level_000s": 144232, "signed_change_000s": 852, "signed_change_jobs": 852000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-04-01", "month": "Apr 2021", "year": 2021, "bls_level_000s": 144587, "signed_change_000s": 355, "signed_change_jobs": 355000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-05-01", "month": "May 2021", "year": 2021, "bls_level_000s": 145065, "signed_change_000s": 478, "signed_change_jobs": 478000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-06-01", "month": "Jun 2021", "year": 2021, "bls_level_000s": 145820, "signed_change_000s": 755, "signed_change_jobs": 755000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-07-01", "month": "Jul 2021", "year": 2021, "bls_level_000s": 146762, "signed_change_000s": 942, "signed_change_jobs": 942000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-08-01", "month": "Aug 2021", "year": 2021, "bls_level_000s": 147314, "signed_change_000s": 552, "signed_change_jobs": 552000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-09-01", "month": "Sep 2021", "year": 2021, "bls_level_000s": 147771, "signed_change_000s": 457, "signed_change_jobs": 457000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-10-01", "month": "Oct 2021", "year": 2021, "bls_level_000s": 148572, "signed_change_000s": 801, "signed_change_jobs": 801000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-11-01", "month": "Nov 2021", "year": 2021, "bls_level_000s": 149230, "signed_change_000s": 658, "signed_change_jobs": 658000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2021-12-01", "month": "Dec 2021", "year": 2021, "bls_level_000s": 149816, "signed_change_000s": 586, "signed_change_jobs": 586000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-01-01", "month": "Jan 2022", "year": 2022, "bls_level_000s": 150006, "signed_change_000s": 190, "signed_change_jobs": 190000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-02-01", "month": "Feb 2022", "year": 2022, "bls_level_000s": 150825, "signed_change_000s": 819, "signed_change_jobs": 819000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-03-01", "month": "Mar 2022", "year": 2022, "bls_level_000s": 151315, "signed_change_000s": 490, "signed_change_jobs": 490000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-04-01", "month": "Apr 2022", "year": 2022, "bls_level_000s": 151623, "signed_change_000s": 308, "signed_change_jobs": 308000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-05-01", "month": "May 2022", "year": 2022, "bls_level_000s": 151924, "signed_change_000s": 301, "signed_change_jobs": 301000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-06-01", "month": "Jun 2022", "year": 2022, "bls_level_000s": 152358, "signed_change_000s": 434, "signed_change_jobs": 434000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-07-01", "month": "Jul 2022", "year": 2022, "bls_level_000s": 153072, "signed_change_000s": 714, "signed_change_jobs": 714000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-08-01", "month": "Aug 2022", "year": 2022, "bls_level_000s": 153362, "signed_change_000s": 290, "signed_change_jobs": 290000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-09-01", "month": "Sep 2022", "year": 2022, "bls_level_000s": 153582, "signed_change_000s": 220, "signed_change_jobs": 220000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-10-01", "month": "Oct 2022", "year": 2022, "bls_level_000s": 153939, "signed_change_000s": 357, "signed_change_jobs": 357000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-11-01", "month": "Nov 2022", "year": 2022, "bls_level_000s": 154242, "signed_change_000s": 303, "signed_change_jobs": 303000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2022-12-01", "month": "Dec 2022", "year": 2022, "bls_level_000s": 154342, "signed_change_000s": 100, "signed_change_jobs": 100000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-01-01", "month": "Jan 2023", "year": 2023, "bls_level_000s": 154776, "signed_change_000s": 434, "signed_change_jobs": 434000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-02-01", "month": "Feb 2023", "year": 2023, "bls_level_000s": 155066, "signed_change_000s": 290, "signed_change_jobs": 290000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-03-01", "month": "Mar 2023", "year": 2023, "bls_level_000s": 155134, "signed_change_000s": 68, "signed_change_jobs": 68000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-04-01", "month": "Apr 2023", "year": 2023, "bls_level_000s": 155375, "signed_change_000s": 241, "signed_change_jobs": 241000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-05-01", "month": "May 2023", "year": 2023, "bls_level_000s": 155655, "signed_change_000s": 280, "signed_change_jobs": 280000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-06-01", "month": "Jun 2023", "year": 2023, "bls_level_000s": 155880, "signed_change_000s": 225, "signed_change_jobs": 225000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-07-01", "month": "Jul 2023", "year": 2023, "bls_level_000s": 156043, "signed_change_000s": 163, "signed_change_jobs": 163000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-08-01", "month": "Aug 2023", "year": 2023, "bls_level_000s": 156261, "signed_change_000s": 218, "signed_change_jobs": 218000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-09-01", "month": "Sep 2023", "year": 2023, "bls_level_000s": 156417, "signed_change_000s": 156, "signed_change_jobs": 156000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-10-01", "month": "Oct 2023", "year": 2023, "bls_level_000s": 156576, "signed_change_000s": 159, "signed_change_jobs": 159000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-11-01", "month": "Nov 2023", "year": 2023, "bls_level_000s": 156703, "signed_change_000s": 127, "signed_change_jobs": 127000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2023-12-01", "month": "Dec 2023", "year": 2023, "bls_level_000s": 156857, "signed_change_000s": 154, "signed_change_jobs": 154000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-01-01", "month": "Jan 2024", "year": 2024, "bls_level_000s": 157032, "signed_change_000s": 175, "signed_change_jobs": 175000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-02-01", "month": "Feb 2024", "year": 2024, "bls_level_000s": 157238, "signed_change_000s": 206, "signed_change_jobs": 206000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-03-01", "month": "Mar 2024", "year": 2024, "bls_level_000s": 157466, "signed_change_000s": 228, "signed_change_jobs": 228000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-04-01", "month": "Apr 2024", "year": 2024, "bls_level_000s": 157530, "signed_change_000s": 64, "signed_change_jobs": 64000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-05-01", "month": "May 2024", "year": 2024, "bls_level_000s": 157608, "signed_change_000s": 78, "signed_change_jobs": 78000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-06-01", "month": "Jun 2024", "year": 2024, "bls_level_000s": 157695, "signed_change_000s": 87, "signed_change_jobs": 87000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-07-01", "month": "Jul 2024", "year": 2024, "bls_level_000s": 157748, "signed_change_000s": 53, "signed_change_jobs": 53000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-08-01", "month": "Aug 2024", "year": 2024, "bls_level_000s": 157757, "signed_change_000s": 9, "signed_change_jobs": 9000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-09-01", "month": "Sep 2024", "year": 2024, "bls_level_000s": 157912, "signed_change_000s": 155, "signed_change_jobs": 155000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-10-01", "month": "Oct 2024", "year": 2024, "bls_level_000s": 157945, "signed_change_000s": 33, "signed_change_jobs": 33000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-11-01", "month": "Nov 2024", "year": 2024, "bls_level_000s": 158079, "signed_change_000s": 134, "signed_change_jobs": 134000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2024-12-01", "month": "Dec 2024", "year": 2024, "bls_level_000s": 158316, "signed_change_000s": 237, "signed_change_jobs": 237000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-01-01", "month": "Jan 2025", "year": 2025, "bls_level_000s": 158268, "signed_change_000s": -48, "signed_change_jobs": -48000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-02-01", "month": "Feb 2025", "year": 2025, "bls_level_000s": 158310, "signed_change_000s": 42, "signed_change_jobs": 42000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-03-01", "month": "Mar 2025", "year": 2025, "bls_level_000s": 158377, "signed_change_000s": 67, "signed_change_jobs": 67000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-04-01", "month": "Apr 2025", "year": 2025, "bls_level_000s": 158485, "signed_change_000s": 108, "signed_change_jobs": 108000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-05-01", "month": "May 2025", "year": 2025, "bls_level_000s": 158498, "signed_change_000s": 13, "signed_change_jobs": 13000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-06-01", "month": "Jun 2025", "year": 2025, "bls_level_000s": 158478, "signed_change_000s": -20, "signed_change_jobs": -20000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-07-01", "month": "Jul 2025", "year": 2025, "bls_level_000s": 158542, "signed_change_000s": 64, "signed_change_jobs": 64000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-08-01", "month": "Aug 2025", "year": 2025, "bls_level_000s": 158472, "signed_change_000s": -70, "signed_change_jobs": -70000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-09-01", "month": "Sep 2025", "year": 2025, "bls_level_000s": 158548, "signed_change_000s": 76, "signed_change_jobs": 76000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-10-01", "month": "Oct 2025", "year": 2025, "bls_level_000s": 158408, "signed_change_000s": -140, "signed_change_jobs": -140000, "report_status": "No Employment Situation report published", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "BLS archive states the October 2025 Employment Situation was not published due to the 2025 lapse in federal government appropriations. Numeric change shown is computed from the latest official CES series."}, {"month_date": "2025-11-01", "month": "Nov 2025", "year": 2025, "bls_level_000s": 158449, "signed_change_000s": 41, "signed_change_jobs": 41000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2025-12-01", "month": "Dec 2025", "year": 2025, "bls_level_000s": 158432, "signed_change_000s": -17, "signed_change_jobs": -17000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2026-01-01", "month": "Jan 2026", "year": 2026, "bls_level_000s": 158592, "signed_change_000s": 160, "signed_change_jobs": 160000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2026-02-01", "month": "Feb 2026", "year": 2026, "bls_level_000s": 158436, "signed_change_000s": -156, "signed_change_jobs": -156000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2026-03-01", "month": "Mar 2026", "year": 2026, "bls_level_000s": 158650, "signed_change_000s": 214, "signed_change_jobs": 214000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2026-04-01", "month": "Apr 2026", "year": 2026, "bls_level_000s": 158829, "signed_change_000s": 179, "signed_change_jobs": 179000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2026-05-01", "month": "May 2026", "year": 2026, "bls_level_000s": 159001, "signed_change_000s": 172, "signed_change_jobs": 172000, "report_status": "Available", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "Computed as current-month total nonfarm level minus prior-month level, in thousands."}, {"month_date": "2026-06-01", "month": "Jun 2026", "year": 2026, "bls_level_000s": "", "signed_change_000s": "", "signed_change_jobs": "", "report_status": "Pending/not posted in BLS current page checked", "source_url": "https://data.bls.gov/timeseries/CES0000000001?output_view=data&include_graphs=true", "notes": "June 2026 value was not available on the BLS current release/series page at time checked."}];
-const data = rawData.filter(d => typeof d.signed_change_000s === 'number');
-function fmt(n) { return (n === '' || n === null || n === undefined) ? '' : Number(n).toLocaleString(); }
-function drawChart() {
+const rawData = [
+  // keep your existing rawData array here
+];
+const numericData = rawData.filter(d => typeof d.signed_change_000s === 'number');
+
+const minMonth = rawData[0].month_date.slice(0, 7);
+const maxMonth = rawData[rawData.length - 1].month_date.slice(0, 7);
+
+const startEl = document.getElementById('startDate');
+const endEl = document.getElementById('endDate');
+
+startEl.min = minMonth;
+startEl.max = maxMonth;
+startEl.value = minMonth;
+
+endEl.min = minMonth;
+endEl.max = maxMonth;
+endEl.value = maxMonth;
+
+function fmt(n) {
+  return (n === '' || n === null || n === undefined)
+    ? ''
+    : Number(n).toLocaleString();
+}
+
+function monthKey(d) {
+  return d.month_date.slice(0, 7);
+}
+
+function getFilteredRows(includeSearch = true) {
+  let start = startEl.value || minMonth;
+  let end = endEl.value || maxMonth;
+
+  if (start > end) {
+    const tmp = start;
+    start = end;
+    end = tmp;
+  }
+
+  const statusValue = document.getElementById('status').value;
+  const searchValue = document.getElementById('search').value.toLowerCase();
+
+  return rawData.filter(d => {
+    const inDateRange = monthKey(d) >= start && monthKey(d) <= end;
+    const inStatus = !statusValue || d.report_status === statusValue;
+    const inSearch = !includeSearch || JSON.stringify(d).toLowerCase().includes(searchValue);
+
+    return inDateRange && inStatus && inSearch;
+  });
+}
+
+function updateKpis(rows) {
+  const nums = rows.filter(d => typeof d.signed_change_000s === 'number');
+
+  document.getElementById('kpiMonths').textContent = nums.length;
+  document.getElementById('kpiPositive').textContent =
+    nums.filter(d => d.signed_change_000s > 0).length;
+
+  if (!nums.length) {
+    document.getElementById('kpiGain').textContent = '-';
+    document.getElementById('kpiLoss').textContent = '-';
+    document.getElementById('kpiGainMonth').textContent = 'No numeric data';
+    document.getElementById('kpiLossMonth').textContent = 'No numeric data';
+    return;
+  }
+
+  const gain = nums.reduce(
+    (a, b) => b.signed_change_000s > a.signed_change_000s ? b : a,
+    nums[0]
+  );
+
+  const loss = nums.reduce(
+    (a, b) => b.signed_change_000s < a.signed_change_000s ? b : a,
+    nums[0]
+  );
+
+  document.getElementById('kpiGain').textContent =
+    (gain.signed_change_000s > 0 ? '+' : '') + fmt(gain.signed_change_000s);
+  document.getElementById('kpiGainMonth').textContent =
+    gain.month + ', thousands';
+
+  document.getElementById('kpiLoss').textContent =
+    (loss.signed_change_000s > 0 ? '+' : '') + fmt(loss.signed_change_000s);
+  document.getElementById('kpiLossMonth').textContent =
+    loss.month + ', thousands';
+}
+
+function drawChart(rows) {
+  const data = rows.filter(d => typeof d.signed_change_000s === 'number');
   const svg = document.getElementById('chart');
-  const W = 1160, H = 480, m = {l:70,r:30,t:25,b:85};
+
+  const W = 1160;
+  const H = 480;
+  const m = { l: 70, r: 30, t: 25, b: 85 };
+
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = '';
-  const vals = data.map(d => d.signed_change_000s);
-  const minV = Math.min(-25000, ...vals), maxV = Math.max(5000, ...vals);
-  const x = i => m.l + i * ((W-m.l-m.r)/(data.length-1));
-  const y = v => m.t + (maxV-v) * ((H-m.t-m.b)/(maxV-minV));
-  const NS='http://www.w3.org/2000/svg';
-  function el(name, attrs, txt) { const e=document.createElementNS(NS,name); for(const k in attrs) e.setAttribute(k,attrs[k]); if(txt!==undefined) e.textContent=txt; svg.appendChild(e); return e; }
-  const ticks=[-25000,-20000,-15000,-10000,-5000,0,5000];
-  ticks.forEach(t => {
-    el('line',{x1:m.l,y1:y(t),x2:W-m.r,y2:y(t),class:t===0?'zero':'gridline'});
-    el('text',{x:m.l-8,y:y(t)+4,'text-anchor':'end',fill:'#69727d','font-size':'11'}, t>0?'+'+fmt(t):fmt(t));
-  });
-  for(let i=0;i<data.length;i+=2) {
-    el('line',{x1:x(i),y1:m.t,x2:x(i),y2:H-m.b,class:'gridline'});
-    const label=data[i].month;
-    const tx=el('text',{x:x(i),y:H-m.b+20,transform:`rotate(-90 ${x(i)} ${H-m.b+20})`,'text-anchor':'end',fill:'#69727d','font-size':'10'},label);
+
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function el(name, attrs, txt) {
+    const e = document.createElementNS(NS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt !== undefined) e.textContent = txt;
+    svg.appendChild(e);
+    return e;
   }
-  let path=''; data.forEach((d,i)=>{ path += (i?'L':'M')+x(i)+','+y(d.signed_change_000s)+' '; });
-  el('path',{d:path,class:'line'});
-  data.forEach((d,i)=>{
-    const c=el('circle',{cx:x(i),cy:y(d.signed_change_000s),r:3,class:d.signed_change_000s<0?'dot neg':'dot'});
+
+  if (data.length === 0) {
+    el(
+      'text',
+      {
+        x: W / 2,
+        y: H / 2,
+        'text-anchor': 'middle',
+        fill: '#69727d',
+        'font-size': '16'
+      },
+      'No numeric data in selected range'
+    );
+    return;
+  }
+
+  const vals = data.map(d => d.signed_change_000s);
+  const pad = Math.max(200, (Math.max(...vals) - Math.min(...vals)) * 0.1);
+
+  const minV = Math.min(
+    -100,
+    Math.floor((Math.min(...vals) - pad) / 500) * 500
+  );
+
+  const maxV = Math.max(
+    100,
+    Math.ceil((Math.max(...vals) + pad) / 500) * 500
+  );
+
+  const x = i =>
+    data.length === 1
+      ? m.l + (W - m.l - m.r) / 2
+      : m.l + i * ((W - m.l - m.r) / (data.length - 1));
+
+  const y = v =>
+    m.t + (maxV - v) * ((H - m.t - m.b) / (maxV - minV));
+
+  const ticks = [];
+  for (let t = minV; t <= maxV; t += (maxV - minV) / 6) {
+    ticks.push(Math.round(t / 100) * 100);
+  }
+
+  [...new Set(ticks.concat([0]).sort((a, b) => a - b))].forEach(t => {
+    el('line', {
+      x1: m.l,
+      y1: y(t),
+      x2: W - m.r,
+      y2: y(t),
+      class: t === 0 ? 'zero' : 'gridline'
+    });
+
+    el(
+      'text',
+      {
+        x: m.l - 8,
+        y: y(t) + 4,
+        'text-anchor': 'end',
+        fill: '#69727d',
+        'font-size': '11'
+      },
+      t > 0 ? '+' + fmt(t) : fmt(t)
+    );
+  });
+
+  const step = Math.max(1, Math.ceil(data.length / 24));
+
+  for (let i = 0; i < data.length; i += step) {
+    el('line', {
+      x1: x(i),
+      y1: m.t,
+      x2: x(i),
+      y2: H - m.b,
+      class: 'gridline'
+    });
+
+    el(
+      'text',
+      {
+        x: x(i),
+        y: H - m.b + 20,
+        transform: `rotate(-90 ${x(i)} ${H - m.b + 20})`,
+        'text-anchor': 'end',
+        fill: '#69727d',
+        'font-size': '10'
+      },
+      data[i].month
+    );
+  }
+
+  let path = '';
+  data.forEach((d, i) => {
+    path += (i ? 'L' : 'M') + x(i) + ',' + y(d.signed_change_000s) + ' ';
+  });
+
+  el('path', {
+    d: path,
+    class: 'line'
+  });
+
+  data.forEach((d, i) => {
+    const c = el('circle', {
+      cx: x(i),
+      cy: y(d.signed_change_000s),
+      r: 3,
+      class: d.signed_change_000s < 0 ? 'dot neg' : 'dot'
+    });
+
     c.innerHTML = `<title>${d.month}: ${fmt(d.signed_change_000s)} thousand</title>`;
   });
-  el('text',{x:22,y:(H-m.t-m.b)/2+m.t,transform:`rotate(-90 22 ${(H-m.t-m.b)/2+m.t})`,fill:'#69727d','font-size':'12','text-anchor':'middle'},'Thousands of jobs');
+
+  el(
+    'text',
+    {
+      x: 22,
+      y: (H - m.t - m.b) / 2 + m.t,
+      transform: `rotate(-90 22 ${(H - m.t - m.b) / 2 + m.t})`,
+      fill: '#69727d',
+      'font-size': '12',
+      'text-anchor': 'middle'
+    },
+    'Thousands of jobs'
+  );
 }
-function renderTable() {
-  const q=document.getElementById('search').value.toLowerCase();
-  const st=document.getElementById('status').value;
-  const tbody=document.querySelector('#dataTable tbody');
-  tbody.innerHTML='';
-  rawData.filter(d => (!st || d.report_status===st) && JSON.stringify(d).toLowerCase().includes(q)).forEach(d => {
-    const tr=document.createElement('tr');
-    const cls=Number(d.signed_change_000s)<0?'red':'green';
-    tr.innerHTML=`<td>${d.month}</td><td>${d.year}</td><td>${fmt(d.bls_level_000s)}</td><td><span class="badge ${cls}">${d.signed_change_000s===''?'':(Number(d.signed_change_000s)>0?'+':'')+fmt(d.signed_change_000s)}</span></td><td>${fmt(d.signed_change_jobs)}</td><td>${d.report_status}</td><td><a href="${d.source_url}" target="_blank" rel="noopener">BLS</a></td>`;
+
+function renderTable(rows) {
+  const tbody = document.querySelector('#dataTable tbody');
+  tbody.innerHTML = '';
+
+  rows.forEach(d => {
+    const tr = document.createElement('tr');
+    const isNum = typeof d.signed_change_000s === 'number';
+    const cls = !isNum
+      ? 'gray'
+      : Number(d.signed_change_000s) < 0
+        ? 'red'
+        : 'green';
+
+    const chg = !isNum
+      ? ''
+      : (Number(d.signed_change_000s) > 0 ? '+' : '') + fmt(d.signed_change_000s);
+
+    tr.innerHTML = `
+      <td>${d.month}</td>
+      <td>${d.year}</td>
+      <td>${fmt(d.bls_level_000s)}</td>
+      <td><span class="badge ${cls}">${chg}</span></td>
+      <td>${fmt(d.signed_change_jobs)}</td>
+      <td>${d.report_status}</td>
+      <td><a href="${d.source_url}" target="_blank" rel="noopener">BLS</a></td>
+    `;
+
     tbody.appendChild(tr);
   });
 }
-document.getElementById('search').addEventListener('input', renderTable);
-document.getElementById('status').addEventListener('change', renderTable);
-drawChart(); renderTable();
+
+function updateAll() {
+  if (startEl.value > endEl.value) {
+    const t = startEl.value;
+    startEl.value = endEl.value;
+    endEl.value = t;
+  }
+
+  const rowsNoSearch = getFilteredRows(false);
+  const rowsWithSearch = getFilteredRows(true);
+
+  updateKpis(rowsNoSearch);
+  drawChart(rowsNoSearch);
+  renderTable(rowsWithSearch);
+
+  document.getElementById('rangeNote').textContent =
+    `${startEl.value} to ${endEl.value}`;
+}
+
+document.getElementById('applyBtn').addEventListener('click', updateAll);
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  startEl.value = minMonth;
+  endEl.value = maxMonth;
+  document.getElementById('status').value = '';
+  document.getElementById('search').value = '';
+  updateAll();
+});
+
+document.getElementById('search').addEventListener('input', updateAll);
+document.getElementById('status').addEventListener('change', updateAll);
+startEl.addEventListener('change', updateAll);
+endEl.addEventListener('change', updateAll);
+
+updateAll();
 </script>
 </body>
 </html>
