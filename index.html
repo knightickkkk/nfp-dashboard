@@ -45,6 +45,17 @@
     font-size: 16px;
   }
 
+  .nav-link {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #17375e;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
   main {
     max-width: 1250px;
     margin: 0 auto;
@@ -273,18 +284,7 @@
     header h1 {
       font-size: 23px;
     }
-    <a href="investingforecasts/" class="nav-link">Open Investing Forecasts</a>
   }
-  .nav-link {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 10px 14px;
-  border-radius: 9px;
-  background: #ffffff;
-  color: #17375e;
-  text-decoration: none;
-  font-weight: 700;
-}
 </style>
 </head>
 
@@ -292,6 +292,7 @@
 <header>
   <h1>Total Nonfarm Payroll Employment: Monthly Change</h1>
   <p>BLS CES0000000001. Monthly change in thousands of jobs. Select start/end months to update the chart, KPIs, and table.</p>
+  <a href="investingforecasts/" class="nav-link">Open Investing Forecasts</a>
 </header>
 
 <main>
@@ -483,7 +484,7 @@ function showError(message) {
 
 async function loadData() {
   try {
-    const response = await fetch("nfp_change_data.csv?v=5", { cache: "no-store" });
+    const response = await fetch("nfp_change_data.csv?v=50", { cache: "no-store" });
 
     if (!response.ok) {
       throw new Error("Could not load nfp_change_data.csv");
